@@ -1,341 +1,302 @@
-import { Link, useLocation } from "wouter";
+import { useState } from "react";
+import { Link } from "wouter";
+import { useHashLocation } from "wouter/use-hash-location";
 import { cn } from "@/lib/utils";
-import {
-  AlertTriangle, Archive, ArrowDownAZ, ArrowRightLeft, AtomIcon, BarChart, BookCheck, BookOpen, BookText, Box, BoxSelect, Boxes, Braces, Bug, Calculator, CheckCircle2, CircleAlert, CircleHelp, CircleSlash, Clock, Combine, Compass, Component, Cpu, Database, Diamond, Eye, FileBox, FileCode, FileInput, FileText, Filter, FolderTree, FunctionSquare, Funnel, Gauge, GitBranch, GitFork, GitMerge, Globe, Group, Hammer, Hash, Hourglass, KeyRound, Layers, Layers3, Layout, LayoutDashboard, Library, ListOrdered, Lock, Map, MemoryStick, Network, Package, PackageOpen, Pin, Plug, Quote, Radio, Recycle, RefreshCw, Repeat, Rocket, Scissors, Search, Server, Settings, Settings2, Shapes, Shield, ShieldAlert, ShieldCheck, Sigma, Snowflake, Sparkles, Tag, Tags, Terminal, TestTube, Trash2, Trees, Type, UserCheck, Variable, Wand, Wand2, Workflow, X, XCircle, Zap
-} from "lucide-react";
+import { Search, X, BookOpen } from "lucide-react";
 
 const NAVIGATION = [
   {
-    title: "Início",
+    title: "Fundamentos & Setup",
     items: [
-      { path: "/", label: "Início", icon: BookOpen },
+      { path: "/hello-explicado", label: "Olá Mundo Explicado (Capítulo de Exemplo)" },
+      { path: "/historia-csharp", label: "A História do C# e do .NET" },
+      { path: "/dotnet-runtime", label: "O que é o .NET? Runtime, SDK, BCL" },
+      { path: "/instalacao-sdk", label: "Instalando o .NET SDK em Windows, Linux e macOS" },
+      { path: "/dotnet-cli", label: "O CLI dotnet: comandos essenciais" },
+      { path: "/primeiro-programa", label: "Seu primeiro programa em C#" },
+      { path: "/top-level-statements", label: "Top-level statements: o C# moderno sem cerimônia" },
+      { path: "/csproj-anatomy", label: "Entendendo o arquivo .csproj" },
+      { path: "/namespaces-using", label: "Namespaces e diretivas using" },
+      { path: "/comentarios-xmldoc", label: "Comentários e documentação XML" },
+      { path: "/ide-vscode-rider", label: "Escolhendo seu editor: VS Code, Visual Studio e Rider" },
+      { path: "/debug-basico", label: "Depurando seu primeiro programa" },
+      { path: "/build-vs-run", label: "Build, Restore, Run: o ciclo completo" }
     ]
   },
   {
-    title: "Introdução",
+    title: "Sintaxe & Tipos",
     items: [
-      { path: "/o-que-e-csharp", label: "O que é C#", icon: BookOpen },
-      { path: "/dotnet-hoje", label: ".NET hoje (8/9)", icon: Sparkles },
-      { path: "/hello-world", label: "Hello World & primeiro projeto", icon: Terminal },
-      { path: "/dotnet-cli", label: "dotnet CLI essencial", icon: Rocket },
+      { path: "/variaveis-tipos", label: "Variáveis e o sistema de tipos do C#" },
+      { path: "/tipos-valor", label: "Tipos por valor: int, double, bool, char, decimal" },
+      { path: "/tipos-referencia", label: "Tipos por referência: string, object, classes, arrays" },
+      { path: "/operadores", label: "Operadores aritméticos, lógicos e de comparação" },
+      { path: "/conversoes-cast", label: "Conversões e casting de tipos" },
+      { path: "/strings-fundamentos", label: "Strings em C#: o básico que todo iniciante precisa" },
+      { path: "/console-io", label: "Lendo e escrevendo no console" },
+      { path: "/condicionais-if-switch", label: "Condicionais: if, else, switch e switch expression" },
+      { path: "/loops", label: "Loops: for, while, do-while, foreach" },
+      { path: "/arrays", label: "Arrays: tamanho fixo, multidimensionais e jagged" },
+      { path: "/metodos-funcoes", label: "Métodos: parâmetros, retorno e overloading" },
+      { path: "/parametros-out-ref", label: "Parâmetros especiais: ref, out, in e params" }
     ]
   },
   {
-    title: "Fundamentos",
+    title: "Programação Orientada a Objetos",
     items: [
-      { path: "/tipos-primitivos", label: "Tipos primitivos", icon: Hash },
-      { path: "/var-dynamic-object", label: "var, dynamic e object", icon: Variable },
-      { path: "/operadores", label: "Operadores", icon: Calculator },
-      { path: "/controle-fluxo", label: "Controle de fluxo", icon: GitBranch },
-      { path: "/strings", label: "Strings em C#", icon: Type },
-      { path: "/datetime", label: "DateTime, DateOnly, TimeOnly", icon: Clock },
-      { path: "/conversoes-parsing", label: "Conversões e Parsing", icon: RefreshCw },
-      { path: "/nullable-reference", label: "Nullable Reference Types", icon: CheckCircle2 },
-      { path: "/nullable-value", label: "Nullable Value Types", icon: CircleHelp },
-      { path: "/arrays-multi", label: "Arrays multidimensionais", icon: Boxes },
+      { path: "/classes-objetos", label: "Classes e objetos: a base da POO" },
+      { path: "/propriedades", label: "Propriedades: getters e setters elegantes" },
+      { path: "/construtores", label: "Construtores: dando vida aos objetos" },
+      { path: "/this-base", label: "As palavras-chave this e base" },
+      { path: "/encapsulamento", label: "Encapsulamento: public, private, protected, internal" },
+      { path: "/heranca", label: "Herança: reaproveitando comportamento" },
+      { path: "/polimorfismo", label: "Polimorfismo: um nome, vários comportamentos" },
+      { path: "/classes-abstract", label: "Classes abstratas: contratos parcialmente implementados" },
+      { path: "/interfaces", label: "Interfaces: contratos puros entre classes" },
+      { path: "/sealed-virtual", label: "sealed, virtual, override e abstract na prática" },
+      { path: "/classes-static-partial", label: "Classes static, partial e nested" },
+      { path: "/records-vs-class", label: "Records: classes com igualdade por valor" }
     ]
   },
   {
-    title: "Coleções",
+    title: "Tipos Avançados",
     items: [
-      { path: "/list-t", label: "List<T>", icon: ListOrdered },
-      { path: "/dictionary", label: "Dictionary<TK,TV>", icon: Library },
-      { path: "/hashset", label: "HashSet<T>", icon: Database },
-      { path: "/queue-stack", label: "Queue, Stack, LinkedList", icon: Boxes },
-      { path: "/immutable-collections", label: "Immutable Collections", icon: Layers3 },
-      { path: "/span-memory", label: "Span<T> e Memory<T>", icon: Snowflake },
-      { path: "/readonly-collections", label: "IReadOnlyList, IReadOnlyDictionary", icon: Cpu },
-      { path: "/collection-expressions", label: "Collection expressions (C# 12)", icon: Lock },
+      { path: "/enums", label: "Enums: conjuntos nomeados de constantes" },
+      { path: "/structs", label: "Structs: tipos por valor sob medida" },
+      { path: "/tuplas", label: "Tuplas: agrupando valores sem criar uma classe" },
+      { path: "/anonymous-types", label: "Tipos anônimos: objetos sem nome de classe" },
+      { path: "/nullable-reference", label: "Nullable reference types: o C# que avisa antes do crash" },
+      { path: "/value-vs-reference", label: "Value type vs Reference type: a diferença que importa" },
+      { path: "/boxing-unboxing", label: "Boxing e unboxing: o custo escondido" },
+      { path: "/immutable", label: "Imutabilidade: por que e como tornar tipos imutáveis" },
+      { path: "/init-only-required", label: "Modificadores init e required: imutabilidade moderna" },
+      { path: "/deconstruction", label: "Deconstruction: desempacotando objetos" },
+      { path: "/indexers", label: "Indexers: acessando objetos como arrays" },
+      { path: "/pattern-matching", label: "Pattern matching: switch poderoso e is melhorado" }
     ]
   },
   {
-    title: "POO",
+    title: "C# Moderno & Generics",
     items: [
-      { path: "/classes", label: "Classes e objetos", icon: Component },
-      { path: "/construtores", label: "Construtores", icon: Wand2 },
-      { path: "/properties", label: "Propriedades", icon: Shapes },
-      { path: "/heranca", label: "Herança", icon: GitMerge },
-      { path: "/polimorfismo", label: "Polimorfismo", icon: Repeat },
-      { path: "/interfaces", label: "Interfaces", icon: Plug },
-      { path: "/abstract-sealed", label: "abstract, virtual, sealed", icon: ShieldCheck },
-      { path: "/static-membros", label: "static: membros e classes", icon: Pin },
-      { path: "/records", label: "Records (C# 9+)", icon: FileBox },
-      { path: "/struct-vs-class", label: "struct vs class", icon: Box },
-      { path: "/enums-csharp", label: "Enums", icon: Tags },
-      { path: "/tuples", label: "Tuples", icon: Group },
+      { path: "/csharp-versions-novidades", label: "C# 7 a C# 13: novidades versão a versão" },
+      { path: "/file-scoped-namespaces", label: "File-scoped namespaces: menos indentação" },
+      { path: "/global-using", label: "Global using e ImplicitUsings" },
+      { path: "/generics-basico", label: "Generics: tipos parametrizados sem boxing" },
+      { path: "/generics-restricoes-where", label: "Restrições genéricas com where" },
+      { path: "/generics-metodos", label: "Métodos genéricos: poder em métodos individuais" },
+      { path: "/generics-covariance", label: "Covariância e contravariância em generics" },
+      { path: "/default-keyword", label: "A palavra default em generics" },
+      { path: "/generic-math", label: "Generic Math: aritmética genérica com INumber<T>" },
+      { path: "/primary-constructors", label: "Primary constructors em classes (C# 12)" },
+      { path: "/collection-expressions", label: "Collection expressions: literais para coleções (C# 12)" },
+      { path: "/alias-any-type", label: "Using aliases para qualquer tipo (C# 12)" }
     ]
   },
   {
-    title: "Genéricos",
+    title: "Coleções & LINQ (básico)",
     items: [
-      { path: "/genericos-basico", label: "Genéricos: o básico", icon: Sigma },
-      { path: "/constraints", label: "Constraints (where)", icon: Filter },
-      { path: "/variance", label: "Covariance e Contravariance", icon: GitFork },
-      { path: "/generic-math", label: "Generic Math (C# 11)", icon: FunctionSquare },
-      { path: "/generic-methods", label: "Métodos genéricos avançados", icon: Layers },
+      { path: "/array-vs-list", label: "Array vs List<T>: quando usar cada um" },
+      { path: "/list-detalhado", label: "List<T>: o canivete suíço das coleções" },
+      { path: "/dictionary-hashtable", label: "Dictionary<K,V>: lookup O(1) por chave" },
+      { path: "/hashset", label: "HashSet<T>: conjuntos sem duplicatas" },
+      { path: "/queue-stack", label: "Queue<T> e Stack<T>: filas e pilhas" },
+      { path: "/linked-list", label: "LinkedList<T>: lista duplamente encadeada" },
+      { path: "/immutable-collections", label: "Coleções imutáveis: ImmutableList e amigos" },
+      { path: "/concurrent-collections", label: "Coleções concorrentes para multi-thread" },
+      { path: "/span-memory", label: "Span<T> e Memory<T>: zero-copy de alta performance" },
+      { path: "/linq-intro", label: "LINQ: consultando coleções como SQL" },
+      { path: "/linq-where-select", label: "LINQ: Where e Select fundamentais" },
+      { path: "/linq-orderby-groupby", label: "LINQ: OrderBy, ThenBy e GroupBy" }
     ]
   },
   {
-    title: "LINQ",
+    title: "LINQ avançado, Strings & I/O",
     items: [
-      { path: "/linq-intro", label: "LINQ: o que é", icon: Search },
-      { path: "/linq-where-select", label: "Where, Select e companhia", icon: Funnel },
-      { path: "/linq-ordenacao", label: "Ordenação e agrupamento", icon: ArrowDownAZ },
-      { path: "/linq-join", label: "Join, GroupJoin, Zip", icon: GitBranch },
-      { path: "/linq-agregacao", label: "Agregação: Sum, Count, Min, Max, Aggregate", icon: BarChart },
-      { path: "/linq-deferred", label: "Execução deferida vs imediata", icon: Hourglass },
-      { path: "/linq-iqueryable", label: "IQueryable vs IEnumerable", icon: Database },
-      { path: "/linq-set", label: "Distinct, Union, Intersect, Except", icon: CircleSlash },
-      { path: "/linq-paginar", label: "Paginação e Take/Skip", icon: ArrowRightLeft },
+      { path: "/linq-joins", label: "LINQ: Join, GroupJoin e SelectMany" },
+      { path: "/linq-aggregates", label: "LINQ: Sum, Average, Count, Aggregate" },
+      { path: "/linq-set-operations", label: "LINQ: Distinct, Union, Intersect, Except" },
+      { path: "/linq-deferred-execution", label: "Execução adiada (deferred) em LINQ" },
+      { path: "/linq-query-syntax", label: "Query syntax vs Method syntax em LINQ" },
+      { path: "/ienumerable-vs-iqueryable", label: "IEnumerable vs IQueryable: a diferença crucial" },
+      { path: "/stringbuilder", label: "StringBuilder: concatenando strings sem desperdiçar memória" },
+      { path: "/string-interpolation-formatacao", label: "Interpolação e formatação avançada de strings" },
+      { path: "/regex", label: "Expressões regulares com Regex" },
+      { path: "/encoding-unicode", label: "Encoding e Unicode em C#" },
+      { path: "/file-io-fundamentos", label: "Lendo e escrevendo arquivos com File" },
+      { path: "/streams-readers", label: "Streams, StreamReader e StreamWriter" }
     ]
   },
   {
-    title: "Async",
+    title: "JSON, XML & Async",
     items: [
-      { path: "/task-vs-thread", label: "Task vs Thread", icon: Workflow },
-      { path: "/async-await", label: "async / await", icon: Hourglass },
-      { path: "/configureawait", label: "ConfigureAwait(false)", icon: Settings2 },
-      { path: "/cancellationtoken", label: "CancellationToken", icon: XCircle },
-      { path: "/parallel-tasks", label: "Task.WhenAll, WhenAny, Parallel", icon: Cpu },
-      { path: "/iasync-enumerable", label: "IAsyncEnumerable<T>", icon: Repeat },
-      { path: "/valuetask", label: "ValueTask<T>", icon: Zap },
-      { path: "/async-deadlocks", label: "Async deadlocks: como evitar", icon: AlertTriangle },
+      { path: "/json-systemtextjson", label: "JSON com System.Text.Json" },
+      { path: "/xml-linq", label: "XML com XDocument e LINQ to XML" },
+      { path: "/path-directory", label: "Path e Directory: manipulando caminhos e pastas" },
+      { path: "/threads-vs-tasks", label: "Threads vs Tasks: por que usar Task hoje" },
+      { path: "/async-await-fundamentos", label: "async/await: o que realmente acontece" },
+      { path: "/task-of-t", label: "Task e Task<T>: tipos de retorno assíncronos" },
+      { path: "/configureawait", label: "ConfigureAwait(false): quando e por quê" },
+      { path: "/cancellation-token", label: "CancellationToken: cancelando operações async" },
+      { path: "/parallel-foreach", label: "Parallel.For e Parallel.ForEach para CPU-bound" },
+      { path: "/plinq", label: "PLINQ: paralelizando consultas LINQ" },
+      { path: "/channels-pipelines", label: "Channels: produtor-consumidor moderno em C#" },
+      { path: "/async-streams-iasyncenumerable", label: "async streams: IAsyncEnumerable<T> e await foreach" }
     ]
   },
   {
-    title: "C# moderno",
+    title: "Concorrência, Exceções & Reflection",
     items: [
-      { path: "/pattern-matching", label: "Pattern Matching", icon: Sparkles },
-      { path: "/records-with", label: "Records, with e desconstrução", icon: GitMerge },
-      { path: "/init-required", label: "init e required", icon: Diamond },
-      { path: "/primary-constructors", label: "Primary constructors (C# 12)", icon: Wand2 },
-      { path: "/top-level-statements", label: "Top-level statements e file-scoped namespace", icon: Quote },
-      { path: "/raw-strings", label: "Raw string literals (C# 11)", icon: FileText },
-      { path: "/global-usings", label: "Global usings e implicit usings", icon: Globe },
-      { path: "/source-generators-uso", label: "Source Generators (visão de uso)", icon: Wand },
+      { path: "/valuetask", label: "ValueTask<T>: async sem alocar" },
+      { path: "/sincronizacao-locks", label: "Sincronização: lock, Monitor e race conditions" },
+      { path: "/semaphore", label: "SemaphoreSlim: controlando concorrência async" },
+      { path: "/try-catch-finally", label: "Tratamento de exceções: try, catch, finally" },
+      { path: "/throw-rethrow", label: "throw e rethrow: preservando o stack trace" },
+      { path: "/custom-exceptions", label: "Criando suas próprias exceções" },
+      { path: "/exception-filters", label: "Exception filters: catch when (...)" },
+      { path: "/aggregate-exception", label: "AggregateException: quando várias falham juntas" },
+      { path: "/reflection-fundamentos", label: "Reflection: inspecionando tipos em runtime" },
+      { path: "/attributes-customizados", label: "Atributos customizados: metadados em runtime" },
+      { path: "/dynamic-keyword", label: "A palavra dynamic e o DLR" },
+      { path: "/expression-trees", label: "Expression trees: código como dado" }
     ]
   },
   {
-    title: "Exceções",
+    title: "Source Generators & EF Core",
     items: [
-      { path: "/try-catch-finally", label: "try / catch / finally", icon: ShieldAlert },
-      { path: "/custom-exceptions", label: "Exceções customizadas", icon: CircleAlert },
-      { path: "/exception-filters", label: "Exception filters (when)", icon: Filter },
-      { path: "/aggregate-exception", label: "AggregateException e InnerExceptions", icon: Combine },
-      { path: "/exception-best-practices", label: "Boas práticas com exceções", icon: BookCheck },
-    ]
-  },
-  {
-    title: "Memória & performance",
-    items: [
-      { path: "/stack-vs-heap", label: "Stack vs Heap", icon: MemoryStick },
-      { path: "/garbage-collector", label: "Garbage Collector", icon: Trash2 },
-      { path: "/idisposable-using", label: "IDisposable e using", icon: Recycle },
-      { path: "/span-perf", label: "Span<T> em performance", icon: Gauge },
-      { path: "/arraypool", label: "ArrayPool<T>", icon: PackageOpen },
-      { path: "/boxing", label: "Boxing e unboxing", icon: Box },
-      { path: "/ref-struct", label: "ref struct", icon: BoxSelect },
-      { path: "/stackalloc", label: "stackalloc", icon: Layers },
-    ]
-  },
-  {
-    title: "Reflection & meta",
-    items: [
-      { path: "/reflection-basico", label: "Reflection: lendo metadados", icon: Eye },
-      { path: "/atributos", label: "Atributos customizados", icon: Tag },
-      { path: "/expression-trees", label: "Expression Trees", icon: Trees },
-      { path: "/dynamic-dlr", label: "dynamic e DLR", icon: Wand2 },
-    ]
-  },
-  {
-    title: "I/O",
-    items: [
-      { path: "/file-directory", label: "File, Directory, Path", icon: FolderTree },
-      { path: "/streams", label: "Streams", icon: FileInput },
-      { path: "/json", label: "System.Text.Json", icon: Braces },
-      { path: "/xml", label: "XML: parsing e serialização", icon: FileCode },
-      { path: "/compressao", label: "Compressão (gzip, brotli, zip)", icon: Archive },
-    ]
-  },
-  {
-    title: "Networking",
-    items: [
-      { path: "/httpclient", label: "HttpClient", icon: Globe },
-      { path: "/grpc", label: "gRPC", icon: Plug },
-      { path: "/websocket", label: "WebSocket", icon: Radio },
-      { path: "/sockets", label: "Sockets TCP/UDP", icon: Network },
-      { path: "/rest-patterns", label: "Padrões REST com HttpClient", icon: ArrowRightLeft },
-    ]
-  },
-  {
-    title: "Concorrência",
-    items: [
-      { path: "/lock-monitor", label: "lock e Monitor", icon: Lock },
-      { path: "/mutex-semaphore", label: "Mutex e SemaphoreSlim", icon: KeyRound },
-      { path: "/channels", label: "Channels", icon: Workflow },
-      { path: "/interlocked", label: "Interlocked", icon: AtomIcon },
-      { path: "/parallel-linq", label: "PLINQ (Parallel LINQ)", icon: Zap },
-    ]
-  },
-  {
-    title: "Build & ferramentas",
-    items: [
-      { path: "/csproj", label: "csproj: o arquivo de projeto", icon: Hammer },
-      { path: "/nuget", label: "NuGet a fundo", icon: Package },
-      { path: "/roslyn-analyzers", label: "Roslyn Analyzers", icon: Bug },
-      { path: "/aot", label: "AOT (Ahead-of-Time)", icon: Cpu },
-      { path: "/trimming", label: "Trimming", icon: Scissors },
-      { path: "/publish-deploy", label: "dotnet publish & deploy", icon: Rocket },
-    ]
-  },
-  {
-    title: "Testes",
-    items: [
-      { path: "/xunit", label: "xUnit: o framework padrão", icon: TestTube },
-      { path: "/moq", label: "Moq: mocks pra dependências", icon: CheckCircle2 },
-      { path: "/fluentassertions", label: "FluentAssertions", icon: Quote },
-      { path: "/benchmarkdotnet", label: "BenchmarkDotNet", icon: Gauge },
+      { path: "/source-generators", label: "Source Generators: gerando código em compile-time" },
+      { path: "/roslyn-analyzers", label: "Roslyn analyzers: lint customizado" },
+      { path: "/efcore-intro", label: "EF Core: o ORM oficial do .NET" },
+      { path: "/efcore-dbcontext", label: "DbContext: a porta de entrada do EF Core" },
+      { path: "/efcore-entities", label: "Modelando entidades para EF Core" },
+      { path: "/efcore-migrations", label: "Migrations: versionando o schema do banco" },
+      { path: "/efcore-queries", label: "Consultando dados com LINQ no EF Core" },
+      { path: "/efcore-relacionamentos", label: "Relacionamentos: 1:1, 1:N, N:N" },
+      { path: "/efcore-transacoes", label: "Transações no EF Core" },
+      { path: "/efcore-performance", label: "Performance no EF Core: armadilhas e soluções" },
+      { path: "/efcore-raw-sql", label: "SQL bruto e procedures no EF Core" },
+      { path: "/efcore-in-memory", label: "Provider InMemory para testes" }
     ]
   },
   {
     title: "ASP.NET Core",
     items: [
-      { path: "/aspnet-setup", label: "ASP.NET Core: criando o projeto", icon: Server },
-      { path: "/middleware", label: "Middleware", icon: Layers },
-      { path: "/routing-binding", label: "Routing e Model Binding", icon: Map },
-      { path: "/controllers-vs-minimal", label: "Controllers vs Minimal API", icon: Component },
-      { path: "/di-aspnet", label: "Injeção de dependência", icon: Zap },
-      { path: "/configuration", label: "Configuration & Options", icon: Plug },
-      { path: "/jwt-auth", label: "Autenticação JWT", icon: Settings },
-      { path: "/cors", label: "CORS", icon: KeyRound },
-      { path: "/validation", label: "Validação de DTOs", icon: Globe },
-      { path: "/openapi-swagger", label: "OpenAPI / Swagger", icon: CheckCircle2 },
+      { path: "/aspnet-intro", label: "ASP.NET Core: visão geral do framework web" },
+      { path: "/minimal-api", label: "Minimal APIs: criar API REST em 10 linhas" },
+      { path: "/mvc-controllers", label: "MVC Controllers: estrutura clássica para APIs grandes" },
+      { path: "/razor-pages", label: "Razor Pages: páginas server-side com code-behind" },
+      { path: "/blazor-server", label: "Blazor Server: SPA com C# rodando no servidor" },
+      { path: "/blazor-wasm", label: "Blazor WebAssembly: C# rodando no navegador" },
+      { path: "/middleware", label: "Middleware: o pipeline de requisições" },
+      { path: "/dependency-injection", label: "Dependency Injection nativo do ASP.NET Core" },
+      { path: "/configuration-options", label: "Configuration e Options pattern" },
+      { path: "/routing", label: "Routing: do URL ao endpoint" },
+      { path: "/model-validation", label: "Validação de modelos com Data Annotations e FluentValidation" },
+      { path: "/auth-jwt", label: "Autenticação com JWT em ASP.NET Core" }
     ]
   },
   {
-    title: "EF Core",
+    title: "Patterns, Tools & Projetos",
     items: [
-      { path: "/ef-setup", label: "EF Core: setup", icon: Database },
-      { path: "/ef-dbcontext", label: "DbContext, DbSet, mudanças", icon: FileBox },
-      { path: "/ef-migrations", label: "Migrations", icon: GitBranch },
-      { path: "/ef-querying", label: "Querying com LINQ", icon: Search },
-      { path: "/ef-relacionamentos", label: "Relacionamentos", icon: Network },
-      { path: "/ef-performance", label: "EF Performance", icon: Gauge },
+      { path: "/identity-aspnet", label: "ASP.NET Identity: usuários, senhas e roles" },
+      { path: "/openapi-swagger", label: "OpenAPI/Swagger: documentando sua API" },
+      { path: "/signalr", label: "SignalR: comunicação em tempo real" },
+      { path: "/solid", label: "Princípios SOLID com exemplos em C#" },
+      { path: "/repository-pattern", label: "Repository pattern: abstraindo o acesso a dados" },
+      { path: "/mediator-cqrs", label: "Mediator e CQRS com MediatR" },
+      { path: "/httpclient-typed", label: "HttpClient: typed clients e IHttpClientFactory" },
+      { path: "/grpc-aspnet", label: "gRPC em ASP.NET Core" },
+      { path: "/serilog", label: "Logging estruturado com Serilog" },
+      { path: "/benchmarkdotnet", label: "BenchmarkDotNet: medindo performance com rigor" },
+      { path: "/native-aot-trimming", label: "Native AOT e trimming: binários menores e startup instantâneo" },
+      { path: "/publish-deploy", label: "Publish: framework-dependent vs self-contained" },
+      { path: "/xunit-moq", label: "Testes unitários com xUnit, Moq e FluentAssertions" },
+      { path: "/projeto-final-webapi", label: "Projeto final: API REST completa de Tarefas" }
     ]
-  },
-  {
-    title: "Padrões & arquitetura",
-    items: [
-      { path: "/solid", label: "SOLID em C#", icon: Compass },
-      { path: "/clean-architecture", label: "Clean Architecture", icon: LayoutDashboard },
-      { path: "/mediator-cqrs", label: "MediatR e CQRS", icon: Workflow },
-      { path: "/repository-pattern", label: "Repository Pattern", icon: Boxes },
-      { path: "/di-padroes", label: "Padrões de DI avançados", icon: Component },
-    ]
-  },
-  {
-    title: "Segurança",
-    items: [
-      { path: "/hash-cripto", label: "Hash, criptografia, password", icon: Shield },
-      { path: "/jwt-detalhado", label: "JWT a fundo", icon: KeyRound },
-      { path: "/owasp", label: "OWASP Top 10 em ASP.NET", icon: AlertTriangle },
-      { path: "/identity", label: "ASP.NET Identity", icon: UserCheck },
-    ]
-  },
-  {
-    title: "Bibliotecas",
-    items: [
-      { path: "/serilog", label: "Serilog: logging estruturado", icon: BookText },
-      { path: "/automapper", label: "AutoMapper", icon: Map },
-      { path: "/polly", label: "Polly: resiliência", icon: ShieldCheck },
-      { path: "/hangfire", label: "Hangfire: jobs em background", icon: Clock },
-      { path: "/blazor", label: "Blazor: SPA em C#", icon: Layout },
-      { path: "/mediator-source-gen", label: "Mediator (source-gen)", icon: Workflow },
-    ]
-  },
-  {
-    title: "Projetos",
-    items: [
-      { path: "/projeto-cli", label: "Projeto: CLI tool", icon: Terminal },
-      { path: "/projeto-webapi-crud", label: "Projeto: Web API CRUD completo", icon: Server },
-      { path: "/projeto-worker", label: "Projeto: Worker Service", icon: Cpu },
-      { path: "/projeto-grpc", label: "Projeto: serviço gRPC", icon: Network },
-      { path: "/projeto-blazor-todo", label: "Projeto: Blazor TODO app", icon: Layout },
-    ]
-  },
+  }
 ];
 
 interface SidebarProps {
   isOpen: boolean;
-  setIsOpen: (v: boolean) => void;
+  setIsOpen: (open: boolean) => void;
 }
 
 export function Sidebar({ isOpen, setIsOpen }: SidebarProps) {
-  const [location] = useLocation();
+  const [location] = useHashLocation();
+  const [query, setQuery] = useState("");
+  const q = query.trim().toLowerCase();
+
+  const filtered = NAVIGATION.map(sec => ({
+    title: sec.title,
+    items: sec.items.filter(it =>
+      !q || it.label.toLowerCase().includes(q) || it.path.toLowerCase().includes(q)
+    ),
+  })).filter(sec => sec.items.length > 0);
 
   return (
     <>
       {isOpen && (
-        <div
-          className="fixed inset-0 bg-background/80 backdrop-blur-sm z-40 lg:hidden"
-          onClick={() => setIsOpen(false)}
-        />
+        <div onClick={() => setIsOpen(false)} className="fixed inset-0 bg-black/60 z-40 lg:hidden" />
       )}
-
       <aside className={cn(
-        "fixed top-0 bottom-0 left-0 z-50 w-72 bg-card border-r border-border transition-transform duration-300 ease-in-out lg:translate-x-0 overflow-y-auto",
+        "fixed top-0 left-0 z-50 h-screen w-72 bg-card border-r border-border flex flex-col transition-transform lg:translate-x-0",
         isOpen ? "translate-x-0" : "-translate-x-full"
       )}>
-        <div className="p-6">
-          <div className="flex items-center justify-between lg:justify-center mb-8">
-            <Link href="/" className="flex items-center gap-3 group">
-              <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center group-hover:bg-primary/20 transition-colors">
-                <Terminal className="w-5 h-5 text-primary" />
-              </div>
-              <div>
-                <h1 className="font-bold text-sm">C# Guide</h1>
-                <p className="text-xs text-muted-foreground">Livro Completo</p>
-              </div>
-            </Link>
-            <button
-              onClick={() => setIsOpen(false)}
-              className="lg:hidden p-2 rounded-lg hover:bg-accent transition-colors"
-            >
-              <X className="w-4 h-4" />
-            </button>
+        <div className="px-5 py-4 border-b border-border flex items-center justify-between">
+          <Link href="/" className="flex items-center gap-2">
+            <span className="w-8 h-8 rounded bg-primary text-primary-foreground font-extrabold text-sm flex items-center justify-center">C#</span>
+            <div className="leading-tight">
+              <div className="font-bold text-sm">C# Guia Completo</div>
+              <div className="text-[10px] text-muted-foreground uppercase tracking-wider">do zero ao avançado</div>
+            </div>
+          </Link>
+          <button onClick={() => setIsOpen(false)} className="lg:hidden p-1 text-muted-foreground hover:text-foreground">
+            <X className="w-5 h-5" />
+          </button>
+        </div>
+        <div className="px-3 py-3 border-b border-border">
+          <div className="relative">
+            <Search className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" />
+            <input
+              value={query}
+              onChange={e => setQuery(e.target.value)}
+              placeholder="Pesquisar capítulos..."
+              className="w-full pl-9 pr-3 py-2 bg-muted/50 border border-border rounded-lg text-sm placeholder-muted-foreground focus:outline-none focus:border-primary/50"
+            />
           </div>
-
-          <nav className="space-y-6">
-            {NAVIGATION.map((section) => (
-              <div key={section.title}>
-                <h2 className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-2 px-2">
-                  {section.title}
-                </h2>
-                <ul className="space-y-0.5">
-                  {section.items.map((item) => {
-                    const Icon = item.icon;
-                    const isActive = location === item.path;
-                    return (
-                      <li key={item.path}>
-                        <Link
-                          href={item.path}
-                          className={cn(
-                            "flex items-center gap-2.5 px-2 py-1.5 rounded-lg text-sm transition-colors",
-                            isActive
-                              ? "bg-primary text-primary-foreground font-medium"
-                              : "text-muted-foreground hover:text-foreground hover:bg-accent"
-                          )}
-                        >
-                          <Icon className="w-3.5 h-3.5 flex-shrink-0" />
-                          <span className="truncate">{item.label}</span>
-                        </Link>
-                      </li>
-                    );
-                  })}
-                </ul>
+        </div>
+        <nav className="flex-1 overflow-y-auto px-3 py-4 space-y-6">
+          <Link href="/">
+            <div className={cn(
+              "flex items-center gap-2 px-3 py-2 rounded-lg text-sm font-semibold transition",
+              location === "/" ? "bg-primary text-primary-foreground" : "text-foreground hover:bg-muted"
+            )}>
+              <BookOpen className="w-4 h-4" /> Início
+            </div>
+          </Link>
+          {filtered.map(sec => (
+            <div key={sec.title}>
+              <div className="px-3 mb-2 text-[10px] font-bold uppercase tracking-wider text-primary/80">{sec.title}</div>
+              <div className="space-y-0.5">
+                {sec.items.map(it => (
+                  <Link key={it.path} href={it.path}>
+                    <div className={cn(
+                      "px-3 py-1.5 rounded-md text-[13px] transition cursor-pointer",
+                      location === it.path
+                        ? "bg-primary/15 text-primary font-medium"
+                        : "text-muted-foreground hover:text-foreground hover:bg-muted"
+                    )}>
+                      {it.label}
+                    </div>
+                  </Link>
+                ))}
               </div>
-            ))}
-          </nav>
+            </div>
+          ))}
+          {filtered.length === 0 && (
+            <div className="px-3 py-6 text-center text-sm text-muted-foreground">Nenhum capítulo encontrado.</div>
+          )}
+        </nav>
+        <div className="px-5 py-3 border-t border-border text-[11px] text-muted-foreground">
+          {NAVIGATION.reduce((a,s)=>a+s.items.length,0)} capítulos · .NET 9
         </div>
       </aside>
     </>

@@ -17,10 +17,9 @@ export function PageContainer({ title, subtitle, difficulty, timeToRead, childre
     const handleScroll = () => {
       const totalScroll = document.documentElement.scrollTop;
       const windowHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
-      const scroll = `${totalScroll / windowHeight}`;
-      setScrollProgress(Number(scroll));
+      const scroll = totalScroll / windowHeight;
+      setScrollProgress(scroll);
     };
-
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
@@ -31,14 +30,13 @@ export function PageContainer({ title, subtitle, difficulty, timeToRead, childre
         className="fixed top-0 left-0 h-1 bg-primary z-50 transition-all duration-150 ease-out"
         style={{ width: `${scrollProgress * 100}%` }}
       />
-
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.4 }}
       >
         <header className="mb-12">
-          <div className="flex flex-wrap items-center gap-4 mb-4">
+          <div className="flex flex-wrap items-center gap-3 mb-4">
             {difficulty && <DifficultyBadge level={difficulty} />}
             {timeToRead && (
               <span className="text-sm text-muted-foreground font-medium flex items-center gap-1.5">
@@ -46,17 +44,16 @@ export function PageContainer({ title, subtitle, difficulty, timeToRead, childre
               </span>
             )}
           </div>
-          <h1 className="text-4xl sm:text-5xl font-extrabold tracking-tight text-foreground mb-4">
+          <h1 className="text-4xl sm:text-5xl font-extrabold tracking-tight text-foreground mb-4 mt-0 pb-0 border-0">
             {title}
           </h1>
           {subtitle && (
-            <p className="text-xl text-muted-foreground leading-relaxed">
+            <p className="text-xl text-muted-foreground leading-relaxed mb-0">
               {subtitle}
             </p>
           )}
         </header>
-
-        <div className="prose prose-invert max-w-none page-content">
+        <div className="prose prose-invert max-w-none">
           {children}
         </div>
       </motion.div>

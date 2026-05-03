@@ -1,23 +1,19 @@
-import { useState, useEffect } from "react";
-
-type Theme = "dark" | "light";
-
+import { useEffect, useState } from "react";
 export function useTheme() {
-  const [theme, setTheme] = useState<Theme>(() => {
-    if (typeof window !== "undefined") {
-      const saved = localStorage.getItem("ubuntu-theme");
-      if (saved === "dark" || saved === "light") return saved;
-      if (window.matchMedia("(prefers-color-scheme: dark)").matches) return "dark";
-    }
-    return "dark";
-  });
-
+  const [theme, setTheme] = useState<"dark" | "light">("dark");
   useEffect(() => {
-    const root = window.document.documentElement;
-    root.classList.remove("light", "dark");
-    root.classList.add(theme);
-    localStorage.setItem("ubuntu-theme", theme);
-  }, [theme]);
-
-  return { theme, setTheme, toggleTheme: () => setTheme(t => t === "dark" ? "light" : "dark") };
+    const stored = localStorage.getItem("theme") as "dark" | "light" | null;
+    const initial = stored ?? "dark";
+    setTheme(initial);
+    document.documentElement.classList.toggle("dark", initial === "dark");
+  }, []);
+  const toggleTheme = () => {
+    setTheme(t => {
+      const n = t === "dark" ? "light" : "dark";
+      localStorage.setItem("theme", n);
+      document.documentElement.classList.toggle("dark", n === "dark");
+      return n;
+    });
+  };
+  return { theme, toggleTheme };
 }

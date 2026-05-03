@@ -1,37 +1,29 @@
-import { Menu, Search, Moon, Sun } from "lucide-react";
+import { Menu, Moon, Sun } from "lucide-react";
 import { useTheme } from "@/hooks/use-theme";
+import { Link } from "wouter";
 
-interface HeaderProps {
-  onMenuClick: () => void;
-}
+interface HeaderProps { onMenuClick: () => void; }
 
 export function Header({ onMenuClick }: HeaderProps) {
   const { theme, toggleTheme } = useTheme();
-
   return (
-    <header className="sticky top-0 z-30 w-full glass-panel border-b border-border px-4 sm:px-6 h-16 flex items-center justify-between">
-      <div className="flex items-center gap-4">
-        <button
-          onClick={onMenuClick}
-          className="lg:hidden p-2 -ml-2 rounded-md text-muted-foreground hover:text-foreground hover:bg-muted transition-colors"
-        >
+    <header className="sticky top-0 z-30 w-full bg-card/80 backdrop-blur-xl border-b border-border px-4 sm:px-6 h-14 flex items-center justify-between">
+      <div className="flex items-center gap-3">
+        <button onClick={onMenuClick} className="lg:hidden p-2 -ml-2 rounded-md text-muted-foreground hover:text-foreground hover:bg-muted">
           <Menu className="w-5 h-5" />
         </button>
-
-        <button className="hidden sm:flex items-center gap-2 px-3 py-1.5 bg-muted/50 hover:bg-muted border border-border rounded-lg text-sm text-muted-foreground transition-colors w-64">
-          <Search className="w-4 h-4" />
-          <span>Pesquisar conteúdo...</span>
-          <span className="ml-auto text-xs opacity-50 border border-border rounded px-1.5 py-0.5">Ctrl+K</span>
-        </button>
+        <Link href="/" className="flex items-center gap-2 lg:hidden">
+          <span className="w-6 h-6 rounded bg-primary text-primary-foreground font-extrabold text-xs flex items-center justify-center">C#</span>
+          <span className="font-bold text-sm">C# Guia</span>
+        </Link>
       </div>
-
       <div className="flex items-center gap-2">
-        <button
-          onClick={toggleTheme}
-          className="p-2 rounded-full text-muted-foreground hover:text-foreground hover:bg-muted transition-colors"
-          title="Alternar tema"
-        >
-          {theme === "dark" ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
+        <span className="hidden sm:inline-flex items-center gap-1.5 px-2 py-1 rounded-full bg-primary/10 text-primary text-xs font-medium border border-primary/20">
+          <span className="w-1.5 h-1.5 rounded-full bg-primary animate-pulse" />
+          .NET 9 / C# 13
+        </span>
+        <button onClick={toggleTheme} className="p-2 rounded-lg text-muted-foreground hover:text-foreground hover:bg-muted" title="Alternar tema">
+          {theme === "dark" ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
         </button>
       </div>
     </header>

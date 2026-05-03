@@ -35,14 +35,14 @@ export function CodeBlock({ code, language = "bash", title }: CodeBlockProps) {
           className="p-1.5 rounded-md text-gray-400 hover:text-white hover:bg-white/10 transition-colors"
           title="Copiar código"
         >
-          {copied ? <Check className="w-4 h-4 text-green-400" /> : <Copy className="w-4 h-4" />}
+          {copied ? <Check className="w-4 h-4 text-secondary" /> : <Copy className="w-4 h-4" />}
         </button>
       </div>
       <div className="p-4 text-sm font-mono overflow-x-auto">
         <SyntaxHighlighter
           language={language}
           style={vscDarkPlus}
-          customStyle={{ margin: 0, padding: 0, background: "transparent" }}
+          customStyle={{ margin: 0, padding: 0, background: 'transparent' }}
           wrapLines={true}
         >
           {code.trim()}

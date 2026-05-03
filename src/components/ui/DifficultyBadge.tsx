@@ -4,7 +4,7 @@ type Level = "iniciante" | "intermediario" | "avancado";
 
 export function DifficultyBadge({ level }: { level: Level }) {
   const styles = {
-    iniciante: "bg-green-500/10 text-green-500 border-green-500/20",
+    iniciante: "bg-secondary/10 text-secondary border-secondary/20",
     intermediario: "bg-yellow-500/10 text-yellow-500 border-yellow-500/20",
     avancado: "bg-red-500/10 text-red-500 border-red-500/20",
   };

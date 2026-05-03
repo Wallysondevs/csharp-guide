@@ -1,336 +1,348 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, lazy, Suspense } from "react";
 import { Switch, Route, Router as WouterRouter } from "wouter";
 import { useHashLocation } from "wouter/use-hash-location";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-
 import { Sidebar } from "@/components/layout/Sidebar";
 import { Header } from "@/components/layout/Header";
-
 import Home from "@/pages/Home";
-import OQueECsharp from "@/pages/OQueECsharp";
-import DotnetHoje from "@/pages/DotnetHoje";
-import HelloWorld from "@/pages/HelloWorld";
-import DotnetCli from "@/pages/DotnetCli";
-import TiposPrimitivos from "@/pages/TiposPrimitivos";
-import VarDynamicObject from "@/pages/VarDynamicObject";
-import Operadores from "@/pages/Operadores";
-import ControleFluxo from "@/pages/ControleFluxo";
-import Strings from "@/pages/Strings";
-import Datetime from "@/pages/Datetime";
-import ConversoesParsing from "@/pages/ConversoesParsing";
-import NullableReference from "@/pages/NullableReference";
-import NullableValue from "@/pages/NullableValue";
-import ArraysMulti from "@/pages/ArraysMulti";
-import ListT from "@/pages/ListT";
-import Dictionary from "@/pages/Dictionary";
-import Hashset from "@/pages/Hashset";
-import QueueStack from "@/pages/QueueStack";
-import ImmutableCollections from "@/pages/ImmutableCollections";
-import SpanMemory from "@/pages/SpanMemory";
-import ReadonlyCollections from "@/pages/ReadonlyCollections";
-import CollectionExpressions from "@/pages/CollectionExpressions";
-import Classes from "@/pages/Classes";
-import Construtores from "@/pages/Construtores";
-import Properties from "@/pages/Properties";
-import Heranca from "@/pages/Heranca";
-import Polimorfismo from "@/pages/Polimorfismo";
-import Interfaces from "@/pages/Interfaces";
-import AbstractSealed from "@/pages/AbstractSealed";
-import StaticMembros from "@/pages/StaticMembros";
-import Records from "@/pages/Records";
-import StructVsClass from "@/pages/StructVsClass";
-import EnumsCsharp from "@/pages/EnumsCsharp";
-import Tuples from "@/pages/Tuples";
-import GenericosBasico from "@/pages/GenericosBasico";
-import Constraints from "@/pages/Constraints";
-import Variance from "@/pages/Variance";
-import GenericMath from "@/pages/GenericMath";
-import GenericMethods from "@/pages/GenericMethods";
-import LinqIntro from "@/pages/LinqIntro";
-import LinqWhereSelect from "@/pages/LinqWhereSelect";
-import LinqOrdenacao from "@/pages/LinqOrdenacao";
-import LinqJoin from "@/pages/LinqJoin";
-import LinqAgregacao from "@/pages/LinqAgregacao";
-import LinqDeferred from "@/pages/LinqDeferred";
-import LinqIqueryable from "@/pages/LinqIqueryable";
-import LinqSet from "@/pages/LinqSet";
-import LinqPaginar from "@/pages/LinqPaginar";
-import TaskVsThread from "@/pages/TaskVsThread";
-import AsyncAwait from "@/pages/AsyncAwait";
-import Configureawait from "@/pages/Configureawait";
-import Cancellationtoken from "@/pages/Cancellationtoken";
-import ParallelTasks from "@/pages/ParallelTasks";
-import IasyncEnumerable from "@/pages/IasyncEnumerable";
-import Valuetask from "@/pages/Valuetask";
-import AsyncDeadlocks from "@/pages/AsyncDeadlocks";
-import PatternMatching from "@/pages/PatternMatching";
-import RecordsWith from "@/pages/RecordsWith";
-import InitRequired from "@/pages/InitRequired";
-import PrimaryConstructors from "@/pages/PrimaryConstructors";
-import TopLevelStatements from "@/pages/TopLevelStatements";
-import RawStrings from "@/pages/RawStrings";
-import GlobalUsings from "@/pages/GlobalUsings";
-import SourceGeneratorsUso from "@/pages/SourceGeneratorsUso";
-import TryCatchFinally from "@/pages/TryCatchFinally";
-import CustomExceptions from "@/pages/CustomExceptions";
-import ExceptionFilters from "@/pages/ExceptionFilters";
-import AggregateException from "@/pages/AggregateException";
-import ExceptionBestPractices from "@/pages/ExceptionBestPractices";
-import StackVsHeap from "@/pages/StackVsHeap";
-import GarbageCollector from "@/pages/GarbageCollector";
-import IdisposableUsing from "@/pages/IdisposableUsing";
-import SpanPerf from "@/pages/SpanPerf";
-import Arraypool from "@/pages/Arraypool";
-import Boxing from "@/pages/Boxing";
-import RefStruct from "@/pages/RefStruct";
-import Stackalloc from "@/pages/Stackalloc";
-import ReflectionBasico from "@/pages/ReflectionBasico";
-import Atributos from "@/pages/Atributos";
-import ExpressionTrees from "@/pages/ExpressionTrees";
-import DynamicDlr from "@/pages/DynamicDlr";
-import FileDirectory from "@/pages/FileDirectory";
-import Streams from "@/pages/Streams";
-import Json from "@/pages/Json";
-import Xml from "@/pages/Xml";
-import Compressao from "@/pages/Compressao";
-import Httpclient from "@/pages/Httpclient";
-import Grpc from "@/pages/Grpc";
-import Websocket from "@/pages/Websocket";
-import Sockets from "@/pages/Sockets";
-import RestPatterns from "@/pages/RestPatterns";
-import LockMonitor from "@/pages/LockMonitor";
-import MutexSemaphore from "@/pages/MutexSemaphore";
-import Channels from "@/pages/Channels";
-import Interlocked from "@/pages/Interlocked";
-import ParallelLinq from "@/pages/ParallelLinq";
-import Csproj from "@/pages/Csproj";
-import Nuget from "@/pages/Nuget";
-import RoslynAnalyzers from "@/pages/RoslynAnalyzers";
-import Aot from "@/pages/Aot";
-import Trimming from "@/pages/Trimming";
-import PublishDeploy from "@/pages/PublishDeploy";
-import Xunit from "@/pages/Xunit";
-import Moq from "@/pages/Moq";
-import Fluentassertions from "@/pages/Fluentassertions";
-import Benchmarkdotnet from "@/pages/Benchmarkdotnet";
-import AspnetSetup from "@/pages/AspnetSetup";
-import Middleware from "@/pages/Middleware";
-import RoutingBinding from "@/pages/RoutingBinding";
-import ControllersVsMinimal from "@/pages/ControllersVsMinimal";
-import DiAspnet from "@/pages/DiAspnet";
-import Configuration from "@/pages/Configuration";
-import JwtAuth from "@/pages/JwtAuth";
-import Cors from "@/pages/Cors";
-import Validation from "@/pages/Validation";
-import OpenapiSwagger from "@/pages/OpenapiSwagger";
-import EfSetup from "@/pages/EfSetup";
-import EfDbcontext from "@/pages/EfDbcontext";
-import EfMigrations from "@/pages/EfMigrations";
-import EfQuerying from "@/pages/EfQuerying";
-import EfRelacionamentos from "@/pages/EfRelacionamentos";
-import EfPerformance from "@/pages/EfPerformance";
-import Solid from "@/pages/Solid";
-import CleanArchitecture from "@/pages/CleanArchitecture";
-import MediatorCqrs from "@/pages/MediatorCqrs";
-import RepositoryPattern from "@/pages/RepositoryPattern";
-import DiPadroes from "@/pages/DiPadroes";
-import HashCripto from "@/pages/HashCripto";
-import JwtDetalhado from "@/pages/JwtDetalhado";
-import Owasp from "@/pages/Owasp";
-import Identity from "@/pages/Identity";
-import Serilog from "@/pages/Serilog";
-import Automapper from "@/pages/Automapper";
-import Polly from "@/pages/Polly";
-import Hangfire from "@/pages/Hangfire";
-import Blazor from "@/pages/Blazor";
-import MediatorSourceGen from "@/pages/MediatorSourceGen";
-import ProjetoCli from "@/pages/ProjetoCli";
-import ProjetoWebapiCrud from "@/pages/ProjetoWebapiCrud";
-import ProjetoWorker from "@/pages/ProjetoWorker";
-import ProjetoGrpc from "@/pages/ProjetoGrpc";
-import ProjetoBlazorTodo from "@/pages/ProjetoBlazorTodo";
-import NotFound from "@/pages/not-found";
+import NotFound from "@/pages/NotFound";
 
-const queryClient = new QueryClient();
+const HelloExplicado = lazy(() => import("@/pages/HelloExplicado"));
+const HistoriaCsharp = lazy(() => import("@/pages/HistoriaCsharp"));
+const DotnetRuntime = lazy(() => import("@/pages/DotnetRuntime"));
+const InstalacaoSdk = lazy(() => import("@/pages/InstalacaoSdk"));
+const DotnetCli = lazy(() => import("@/pages/DotnetCli"));
+const PrimeiroPrograma = lazy(() => import("@/pages/PrimeiroPrograma"));
+const TopLevelStatements = lazy(() => import("@/pages/TopLevelStatements"));
+const CsprojAnatomy = lazy(() => import("@/pages/CsprojAnatomy"));
+const NamespacesUsing = lazy(() => import("@/pages/NamespacesUsing"));
+const ComentariosXmldoc = lazy(() => import("@/pages/ComentariosXmldoc"));
+const IdeVscodeRider = lazy(() => import("@/pages/IdeVscodeRider"));
+const DebugBasico = lazy(() => import("@/pages/DebugBasico"));
+const BuildVsRun = lazy(() => import("@/pages/BuildVsRun"));
+const VariaveisTipos = lazy(() => import("@/pages/VariaveisTipos"));
+const TiposValor = lazy(() => import("@/pages/TiposValor"));
+const TiposReferencia = lazy(() => import("@/pages/TiposReferencia"));
+const Operadores = lazy(() => import("@/pages/Operadores"));
+const ConversoesCast = lazy(() => import("@/pages/ConversoesCast"));
+const StringsFundamentos = lazy(() => import("@/pages/StringsFundamentos"));
+const ConsoleIo = lazy(() => import("@/pages/ConsoleIo"));
+const CondicionaisIfSwitch = lazy(() => import("@/pages/CondicionaisIfSwitch"));
+const Loops = lazy(() => import("@/pages/Loops"));
+const Arrays = lazy(() => import("@/pages/Arrays"));
+const MetodosFuncoes = lazy(() => import("@/pages/MetodosFuncoes"));
+const ParametrosOutRef = lazy(() => import("@/pages/ParametrosOutRef"));
+const ClassesObjetos = lazy(() => import("@/pages/ClassesObjetos"));
+const Propriedades = lazy(() => import("@/pages/Propriedades"));
+const Construtores = lazy(() => import("@/pages/Construtores"));
+const ThisBase = lazy(() => import("@/pages/ThisBase"));
+const Encapsulamento = lazy(() => import("@/pages/Encapsulamento"));
+const Heranca = lazy(() => import("@/pages/Heranca"));
+const Polimorfismo = lazy(() => import("@/pages/Polimorfismo"));
+const ClassesAbstract = lazy(() => import("@/pages/ClassesAbstract"));
+const Interfaces = lazy(() => import("@/pages/Interfaces"));
+const SealedVirtual = lazy(() => import("@/pages/SealedVirtual"));
+const ClassesStaticPartial = lazy(() => import("@/pages/ClassesStaticPartial"));
+const RecordsVsClass = lazy(() => import("@/pages/RecordsVsClass"));
+const Enums = lazy(() => import("@/pages/Enums"));
+const Structs = lazy(() => import("@/pages/Structs"));
+const Tuplas = lazy(() => import("@/pages/Tuplas"));
+const AnonymousTypes = lazy(() => import("@/pages/AnonymousTypes"));
+const NullableReference = lazy(() => import("@/pages/NullableReference"));
+const ValueVsReference = lazy(() => import("@/pages/ValueVsReference"));
+const BoxingUnboxing = lazy(() => import("@/pages/BoxingUnboxing"));
+const Immutable = lazy(() => import("@/pages/Immutable"));
+const InitOnlyRequired = lazy(() => import("@/pages/InitOnlyRequired"));
+const Deconstruction = lazy(() => import("@/pages/Deconstruction"));
+const Indexers = lazy(() => import("@/pages/Indexers"));
+const PatternMatching = lazy(() => import("@/pages/PatternMatching"));
+const CsharpVersionsNovidades = lazy(() => import("@/pages/CsharpVersionsNovidades"));
+const FileScopedNamespaces = lazy(() => import("@/pages/FileScopedNamespaces"));
+const GlobalUsing = lazy(() => import("@/pages/GlobalUsing"));
+const GenericsBasico = lazy(() => import("@/pages/GenericsBasico"));
+const GenericsRestricoesWhere = lazy(() => import("@/pages/GenericsRestricoesWhere"));
+const GenericsMetodos = lazy(() => import("@/pages/GenericsMetodos"));
+const GenericsCovariance = lazy(() => import("@/pages/GenericsCovariance"));
+const DefaultKeyword = lazy(() => import("@/pages/DefaultKeyword"));
+const GenericMath = lazy(() => import("@/pages/GenericMath"));
+const PrimaryConstructors = lazy(() => import("@/pages/PrimaryConstructors"));
+const CollectionExpressions = lazy(() => import("@/pages/CollectionExpressions"));
+const AliasAnyType = lazy(() => import("@/pages/AliasAnyType"));
+const ArrayVsList = lazy(() => import("@/pages/ArrayVsList"));
+const ListDetalhado = lazy(() => import("@/pages/ListDetalhado"));
+const DictionaryHashtable = lazy(() => import("@/pages/DictionaryHashtable"));
+const Hashset = lazy(() => import("@/pages/Hashset"));
+const QueueStack = lazy(() => import("@/pages/QueueStack"));
+const LinkedList = lazy(() => import("@/pages/LinkedList"));
+const ImmutableCollections = lazy(() => import("@/pages/ImmutableCollections"));
+const ConcurrentCollections = lazy(() => import("@/pages/ConcurrentCollections"));
+const SpanMemory = lazy(() => import("@/pages/SpanMemory"));
+const LinqIntro = lazy(() => import("@/pages/LinqIntro"));
+const LinqWhereSelect = lazy(() => import("@/pages/LinqWhereSelect"));
+const LinqOrderbyGroupby = lazy(() => import("@/pages/LinqOrderbyGroupby"));
+const LinqJoins = lazy(() => import("@/pages/LinqJoins"));
+const LinqAggregates = lazy(() => import("@/pages/LinqAggregates"));
+const LinqSetOperations = lazy(() => import("@/pages/LinqSetOperations"));
+const LinqDeferredExecution = lazy(() => import("@/pages/LinqDeferredExecution"));
+const LinqQuerySyntax = lazy(() => import("@/pages/LinqQuerySyntax"));
+const IenumerableVsIqueryable = lazy(() => import("@/pages/IenumerableVsIqueryable"));
+const Stringbuilder = lazy(() => import("@/pages/Stringbuilder"));
+const StringInterpolationFormatacao = lazy(() => import("@/pages/StringInterpolationFormatacao"));
+const Regex = lazy(() => import("@/pages/Regex"));
+const EncodingUnicode = lazy(() => import("@/pages/EncodingUnicode"));
+const FileIoFundamentos = lazy(() => import("@/pages/FileIoFundamentos"));
+const StreamsReaders = lazy(() => import("@/pages/StreamsReaders"));
+const JsonSystemtextjson = lazy(() => import("@/pages/JsonSystemtextjson"));
+const XmlLinq = lazy(() => import("@/pages/XmlLinq"));
+const PathDirectory = lazy(() => import("@/pages/PathDirectory"));
+const ThreadsVsTasks = lazy(() => import("@/pages/ThreadsVsTasks"));
+const AsyncAwaitFundamentos = lazy(() => import("@/pages/AsyncAwaitFundamentos"));
+const TaskOfT = lazy(() => import("@/pages/TaskOfT"));
+const Configureawait = lazy(() => import("@/pages/Configureawait"));
+const CancellationToken = lazy(() => import("@/pages/CancellationToken"));
+const ParallelForeach = lazy(() => import("@/pages/ParallelForeach"));
+const Plinq = lazy(() => import("@/pages/Plinq"));
+const ChannelsPipelines = lazy(() => import("@/pages/ChannelsPipelines"));
+const AsyncStreamsIasyncenumerable = lazy(() => import("@/pages/AsyncStreamsIasyncenumerable"));
+const Valuetask = lazy(() => import("@/pages/Valuetask"));
+const SincronizacaoLocks = lazy(() => import("@/pages/SincronizacaoLocks"));
+const Semaphore = lazy(() => import("@/pages/Semaphore"));
+const TryCatchFinally = lazy(() => import("@/pages/TryCatchFinally"));
+const ThrowRethrow = lazy(() => import("@/pages/ThrowRethrow"));
+const CustomExceptions = lazy(() => import("@/pages/CustomExceptions"));
+const ExceptionFilters = lazy(() => import("@/pages/ExceptionFilters"));
+const AggregateException = lazy(() => import("@/pages/AggregateException"));
+const ReflectionFundamentos = lazy(() => import("@/pages/ReflectionFundamentos"));
+const AttributesCustomizados = lazy(() => import("@/pages/AttributesCustomizados"));
+const DynamicKeyword = lazy(() => import("@/pages/DynamicKeyword"));
+const ExpressionTrees = lazy(() => import("@/pages/ExpressionTrees"));
+const SourceGenerators = lazy(() => import("@/pages/SourceGenerators"));
+const RoslynAnalyzers = lazy(() => import("@/pages/RoslynAnalyzers"));
+const EfcoreIntro = lazy(() => import("@/pages/EfcoreIntro"));
+const EfcoreDbcontext = lazy(() => import("@/pages/EfcoreDbcontext"));
+const EfcoreEntities = lazy(() => import("@/pages/EfcoreEntities"));
+const EfcoreMigrations = lazy(() => import("@/pages/EfcoreMigrations"));
+const EfcoreQueries = lazy(() => import("@/pages/EfcoreQueries"));
+const EfcoreRelacionamentos = lazy(() => import("@/pages/EfcoreRelacionamentos"));
+const EfcoreTransacoes = lazy(() => import("@/pages/EfcoreTransacoes"));
+const EfcorePerformance = lazy(() => import("@/pages/EfcorePerformance"));
+const EfcoreRawSql = lazy(() => import("@/pages/EfcoreRawSql"));
+const EfcoreInMemory = lazy(() => import("@/pages/EfcoreInMemory"));
+const AspnetIntro = lazy(() => import("@/pages/AspnetIntro"));
+const MinimalApi = lazy(() => import("@/pages/MinimalApi"));
+const MvcControllers = lazy(() => import("@/pages/MvcControllers"));
+const RazorPages = lazy(() => import("@/pages/RazorPages"));
+const BlazorServer = lazy(() => import("@/pages/BlazorServer"));
+const BlazorWasm = lazy(() => import("@/pages/BlazorWasm"));
+const Middleware = lazy(() => import("@/pages/Middleware"));
+const DependencyInjection = lazy(() => import("@/pages/DependencyInjection"));
+const ConfigurationOptions = lazy(() => import("@/pages/ConfigurationOptions"));
+const Routing = lazy(() => import("@/pages/Routing"));
+const ModelValidation = lazy(() => import("@/pages/ModelValidation"));
+const AuthJwt = lazy(() => import("@/pages/AuthJwt"));
+const IdentityAspnet = lazy(() => import("@/pages/IdentityAspnet"));
+const OpenapiSwagger = lazy(() => import("@/pages/OpenapiSwagger"));
+const Signalr = lazy(() => import("@/pages/Signalr"));
+const Solid = lazy(() => import("@/pages/Solid"));
+const RepositoryPattern = lazy(() => import("@/pages/RepositoryPattern"));
+const MediatorCqrs = lazy(() => import("@/pages/MediatorCqrs"));
+const HttpclientTyped = lazy(() => import("@/pages/HttpclientTyped"));
+const GrpcAspnet = lazy(() => import("@/pages/GrpcAspnet"));
+const Serilog = lazy(() => import("@/pages/Serilog"));
+const Benchmarkdotnet = lazy(() => import("@/pages/Benchmarkdotnet"));
+const NativeAotTrimming = lazy(() => import("@/pages/NativeAotTrimming"));
+const PublishDeploy = lazy(() => import("@/pages/PublishDeploy"));
+const XunitMoq = lazy(() => import("@/pages/XunitMoq"));
+const ProjetoFinalWebapi = lazy(() => import("@/pages/ProjetoFinalWebapi"));
+
+function PageLoader() {
+  return (
+    <div className="flex items-center justify-center min-h-[50vh]">
+      <div className="w-8 h-8 border-4 border-primary border-t-transparent rounded-full animate-spin" />
+    </div>
+  );
+}
 
 function Layout({ children }: { children: React.ReactNode }) {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [location] = useHashLocation();
-  useEffect(() => {
-    setIsSidebarOpen(false);
-    window.scrollTo(0, 0);
-  }, [location]);
-
+  useEffect(() => { setIsSidebarOpen(false); window.scrollTo(0, 0); }, [location]);
   return (
     <div className="min-h-screen bg-background text-foreground flex">
       <Sidebar isOpen={isSidebarOpen} setIsOpen={setIsSidebarOpen} />
-      <div className="flex-1 lg:ml-72">
+      <div className="flex-1 lg:pl-72 flex flex-col min-w-0 transition-all duration-300">
         <Header onMenuClick={() => setIsSidebarOpen(true)} />
-        <main>{children}</main>
+        <main className="flex-1">{children}</main>
       </div>
     </div>
   );
 }
 
-function AppRoutes() {
+function Router() {
   return (
-    <Switch>
-      <Route path="/" component={Home} />
-        <Route path="/o-que-e-csharp" component={OQueECsharp} />
-        <Route path="/dotnet-hoje" component={DotnetHoje} />
-        <Route path="/hello-world" component={HelloWorld} />
+    <Layout>
+      <Suspense fallback={<PageLoader />}>
+        <Switch>
+          <Route path="/" component={Home} />
+        <Route path="/hello-explicado" component={HelloExplicado} />
+        <Route path="/historia-csharp" component={HistoriaCsharp} />
+        <Route path="/dotnet-runtime" component={DotnetRuntime} />
+        <Route path="/instalacao-sdk" component={InstalacaoSdk} />
         <Route path="/dotnet-cli" component={DotnetCli} />
-        <Route path="/tipos-primitivos" component={TiposPrimitivos} />
-        <Route path="/var-dynamic-object" component={VarDynamicObject} />
+        <Route path="/primeiro-programa" component={PrimeiroPrograma} />
+        <Route path="/top-level-statements" component={TopLevelStatements} />
+        <Route path="/csproj-anatomy" component={CsprojAnatomy} />
+        <Route path="/namespaces-using" component={NamespacesUsing} />
+        <Route path="/comentarios-xmldoc" component={ComentariosXmldoc} />
+        <Route path="/ide-vscode-rider" component={IdeVscodeRider} />
+        <Route path="/debug-basico" component={DebugBasico} />
+        <Route path="/build-vs-run" component={BuildVsRun} />
+        <Route path="/variaveis-tipos" component={VariaveisTipos} />
+        <Route path="/tipos-valor" component={TiposValor} />
+        <Route path="/tipos-referencia" component={TiposReferencia} />
         <Route path="/operadores" component={Operadores} />
-        <Route path="/controle-fluxo" component={ControleFluxo} />
-        <Route path="/strings" component={Strings} />
-        <Route path="/datetime" component={Datetime} />
-        <Route path="/conversoes-parsing" component={ConversoesParsing} />
-        <Route path="/nullable-reference" component={NullableReference} />
-        <Route path="/nullable-value" component={NullableValue} />
-        <Route path="/arrays-multi" component={ArraysMulti} />
-        <Route path="/list-t" component={ListT} />
-        <Route path="/dictionary" component={Dictionary} />
-        <Route path="/hashset" component={Hashset} />
-        <Route path="/queue-stack" component={QueueStack} />
-        <Route path="/immutable-collections" component={ImmutableCollections} />
-        <Route path="/span-memory" component={SpanMemory} />
-        <Route path="/readonly-collections" component={ReadonlyCollections} />
-        <Route path="/collection-expressions" component={CollectionExpressions} />
-        <Route path="/classes" component={Classes} />
+        <Route path="/conversoes-cast" component={ConversoesCast} />
+        <Route path="/strings-fundamentos" component={StringsFundamentos} />
+        <Route path="/console-io" component={ConsoleIo} />
+        <Route path="/condicionais-if-switch" component={CondicionaisIfSwitch} />
+        <Route path="/loops" component={Loops} />
+        <Route path="/arrays" component={Arrays} />
+        <Route path="/metodos-funcoes" component={MetodosFuncoes} />
+        <Route path="/parametros-out-ref" component={ParametrosOutRef} />
+        <Route path="/classes-objetos" component={ClassesObjetos} />
+        <Route path="/propriedades" component={Propriedades} />
         <Route path="/construtores" component={Construtores} />
-        <Route path="/properties" component={Properties} />
+        <Route path="/this-base" component={ThisBase} />
+        <Route path="/encapsulamento" component={Encapsulamento} />
         <Route path="/heranca" component={Heranca} />
         <Route path="/polimorfismo" component={Polimorfismo} />
+        <Route path="/classes-abstract" component={ClassesAbstract} />
         <Route path="/interfaces" component={Interfaces} />
-        <Route path="/abstract-sealed" component={AbstractSealed} />
-        <Route path="/static-membros" component={StaticMembros} />
-        <Route path="/records" component={Records} />
-        <Route path="/struct-vs-class" component={StructVsClass} />
-        <Route path="/enums-csharp" component={EnumsCsharp} />
-        <Route path="/tuples" component={Tuples} />
-        <Route path="/genericos-basico" component={GenericosBasico} />
-        <Route path="/constraints" component={Constraints} />
-        <Route path="/variance" component={Variance} />
+        <Route path="/sealed-virtual" component={SealedVirtual} />
+        <Route path="/classes-static-partial" component={ClassesStaticPartial} />
+        <Route path="/records-vs-class" component={RecordsVsClass} />
+        <Route path="/enums" component={Enums} />
+        <Route path="/structs" component={Structs} />
+        <Route path="/tuplas" component={Tuplas} />
+        <Route path="/anonymous-types" component={AnonymousTypes} />
+        <Route path="/nullable-reference" component={NullableReference} />
+        <Route path="/value-vs-reference" component={ValueVsReference} />
+        <Route path="/boxing-unboxing" component={BoxingUnboxing} />
+        <Route path="/immutable" component={Immutable} />
+        <Route path="/init-only-required" component={InitOnlyRequired} />
+        <Route path="/deconstruction" component={Deconstruction} />
+        <Route path="/indexers" component={Indexers} />
+        <Route path="/pattern-matching" component={PatternMatching} />
+        <Route path="/csharp-versions-novidades" component={CsharpVersionsNovidades} />
+        <Route path="/file-scoped-namespaces" component={FileScopedNamespaces} />
+        <Route path="/global-using" component={GlobalUsing} />
+        <Route path="/generics-basico" component={GenericsBasico} />
+        <Route path="/generics-restricoes-where" component={GenericsRestricoesWhere} />
+        <Route path="/generics-metodos" component={GenericsMetodos} />
+        <Route path="/generics-covariance" component={GenericsCovariance} />
+        <Route path="/default-keyword" component={DefaultKeyword} />
         <Route path="/generic-math" component={GenericMath} />
-        <Route path="/generic-methods" component={GenericMethods} />
+        <Route path="/primary-constructors" component={PrimaryConstructors} />
+        <Route path="/collection-expressions" component={CollectionExpressions} />
+        <Route path="/alias-any-type" component={AliasAnyType} />
+        <Route path="/array-vs-list" component={ArrayVsList} />
+        <Route path="/list-detalhado" component={ListDetalhado} />
+        <Route path="/dictionary-hashtable" component={DictionaryHashtable} />
+        <Route path="/hashset" component={Hashset} />
+        <Route path="/queue-stack" component={QueueStack} />
+        <Route path="/linked-list" component={LinkedList} />
+        <Route path="/immutable-collections" component={ImmutableCollections} />
+        <Route path="/concurrent-collections" component={ConcurrentCollections} />
+        <Route path="/span-memory" component={SpanMemory} />
         <Route path="/linq-intro" component={LinqIntro} />
         <Route path="/linq-where-select" component={LinqWhereSelect} />
-        <Route path="/linq-ordenacao" component={LinqOrdenacao} />
-        <Route path="/linq-join" component={LinqJoin} />
-        <Route path="/linq-agregacao" component={LinqAgregacao} />
-        <Route path="/linq-deferred" component={LinqDeferred} />
-        <Route path="/linq-iqueryable" component={LinqIqueryable} />
-        <Route path="/linq-set" component={LinqSet} />
-        <Route path="/linq-paginar" component={LinqPaginar} />
-        <Route path="/task-vs-thread" component={TaskVsThread} />
-        <Route path="/async-await" component={AsyncAwait} />
+        <Route path="/linq-orderby-groupby" component={LinqOrderbyGroupby} />
+        <Route path="/linq-joins" component={LinqJoins} />
+        <Route path="/linq-aggregates" component={LinqAggregates} />
+        <Route path="/linq-set-operations" component={LinqSetOperations} />
+        <Route path="/linq-deferred-execution" component={LinqDeferredExecution} />
+        <Route path="/linq-query-syntax" component={LinqQuerySyntax} />
+        <Route path="/ienumerable-vs-iqueryable" component={IenumerableVsIqueryable} />
+        <Route path="/stringbuilder" component={Stringbuilder} />
+        <Route path="/string-interpolation-formatacao" component={StringInterpolationFormatacao} />
+        <Route path="/regex" component={Regex} />
+        <Route path="/encoding-unicode" component={EncodingUnicode} />
+        <Route path="/file-io-fundamentos" component={FileIoFundamentos} />
+        <Route path="/streams-readers" component={StreamsReaders} />
+        <Route path="/json-systemtextjson" component={JsonSystemtextjson} />
+        <Route path="/xml-linq" component={XmlLinq} />
+        <Route path="/path-directory" component={PathDirectory} />
+        <Route path="/threads-vs-tasks" component={ThreadsVsTasks} />
+        <Route path="/async-await-fundamentos" component={AsyncAwaitFundamentos} />
+        <Route path="/task-of-t" component={TaskOfT} />
         <Route path="/configureawait" component={Configureawait} />
-        <Route path="/cancellationtoken" component={Cancellationtoken} />
-        <Route path="/parallel-tasks" component={ParallelTasks} />
-        <Route path="/iasync-enumerable" component={IasyncEnumerable} />
+        <Route path="/cancellation-token" component={CancellationToken} />
+        <Route path="/parallel-foreach" component={ParallelForeach} />
+        <Route path="/plinq" component={Plinq} />
+        <Route path="/channels-pipelines" component={ChannelsPipelines} />
+        <Route path="/async-streams-iasyncenumerable" component={AsyncStreamsIasyncenumerable} />
         <Route path="/valuetask" component={Valuetask} />
-        <Route path="/async-deadlocks" component={AsyncDeadlocks} />
-        <Route path="/pattern-matching" component={PatternMatching} />
-        <Route path="/records-with" component={RecordsWith} />
-        <Route path="/init-required" component={InitRequired} />
-        <Route path="/primary-constructors" component={PrimaryConstructors} />
-        <Route path="/top-level-statements" component={TopLevelStatements} />
-        <Route path="/raw-strings" component={RawStrings} />
-        <Route path="/global-usings" component={GlobalUsings} />
-        <Route path="/source-generators-uso" component={SourceGeneratorsUso} />
+        <Route path="/sincronizacao-locks" component={SincronizacaoLocks} />
+        <Route path="/semaphore" component={Semaphore} />
         <Route path="/try-catch-finally" component={TryCatchFinally} />
+        <Route path="/throw-rethrow" component={ThrowRethrow} />
         <Route path="/custom-exceptions" component={CustomExceptions} />
         <Route path="/exception-filters" component={ExceptionFilters} />
         <Route path="/aggregate-exception" component={AggregateException} />
-        <Route path="/exception-best-practices" component={ExceptionBestPractices} />
-        <Route path="/stack-vs-heap" component={StackVsHeap} />
-        <Route path="/garbage-collector" component={GarbageCollector} />
-        <Route path="/idisposable-using" component={IdisposableUsing} />
-        <Route path="/span-perf" component={SpanPerf} />
-        <Route path="/arraypool" component={Arraypool} />
-        <Route path="/boxing" component={Boxing} />
-        <Route path="/ref-struct" component={RefStruct} />
-        <Route path="/stackalloc" component={Stackalloc} />
-        <Route path="/reflection-basico" component={ReflectionBasico} />
-        <Route path="/atributos" component={Atributos} />
+        <Route path="/reflection-fundamentos" component={ReflectionFundamentos} />
+        <Route path="/attributes-customizados" component={AttributesCustomizados} />
+        <Route path="/dynamic-keyword" component={DynamicKeyword} />
         <Route path="/expression-trees" component={ExpressionTrees} />
-        <Route path="/dynamic-dlr" component={DynamicDlr} />
-        <Route path="/file-directory" component={FileDirectory} />
-        <Route path="/streams" component={Streams} />
-        <Route path="/json" component={Json} />
-        <Route path="/xml" component={Xml} />
-        <Route path="/compressao" component={Compressao} />
-        <Route path="/httpclient" component={Httpclient} />
-        <Route path="/grpc" component={Grpc} />
-        <Route path="/websocket" component={Websocket} />
-        <Route path="/sockets" component={Sockets} />
-        <Route path="/rest-patterns" component={RestPatterns} />
-        <Route path="/lock-monitor" component={LockMonitor} />
-        <Route path="/mutex-semaphore" component={MutexSemaphore} />
-        <Route path="/channels" component={Channels} />
-        <Route path="/interlocked" component={Interlocked} />
-        <Route path="/parallel-linq" component={ParallelLinq} />
-        <Route path="/csproj" component={Csproj} />
-        <Route path="/nuget" component={Nuget} />
+        <Route path="/source-generators" component={SourceGenerators} />
         <Route path="/roslyn-analyzers" component={RoslynAnalyzers} />
-        <Route path="/aot" component={Aot} />
-        <Route path="/trimming" component={Trimming} />
-        <Route path="/publish-deploy" component={PublishDeploy} />
-        <Route path="/xunit" component={Xunit} />
-        <Route path="/moq" component={Moq} />
-        <Route path="/fluentassertions" component={Fluentassertions} />
-        <Route path="/benchmarkdotnet" component={Benchmarkdotnet} />
-        <Route path="/aspnet-setup" component={AspnetSetup} />
+        <Route path="/efcore-intro" component={EfcoreIntro} />
+        <Route path="/efcore-dbcontext" component={EfcoreDbcontext} />
+        <Route path="/efcore-entities" component={EfcoreEntities} />
+        <Route path="/efcore-migrations" component={EfcoreMigrations} />
+        <Route path="/efcore-queries" component={EfcoreQueries} />
+        <Route path="/efcore-relacionamentos" component={EfcoreRelacionamentos} />
+        <Route path="/efcore-transacoes" component={EfcoreTransacoes} />
+        <Route path="/efcore-performance" component={EfcorePerformance} />
+        <Route path="/efcore-raw-sql" component={EfcoreRawSql} />
+        <Route path="/efcore-in-memory" component={EfcoreInMemory} />
+        <Route path="/aspnet-intro" component={AspnetIntro} />
+        <Route path="/minimal-api" component={MinimalApi} />
+        <Route path="/mvc-controllers" component={MvcControllers} />
+        <Route path="/razor-pages" component={RazorPages} />
+        <Route path="/blazor-server" component={BlazorServer} />
+        <Route path="/blazor-wasm" component={BlazorWasm} />
         <Route path="/middleware" component={Middleware} />
-        <Route path="/routing-binding" component={RoutingBinding} />
-        <Route path="/controllers-vs-minimal" component={ControllersVsMinimal} />
-        <Route path="/di-aspnet" component={DiAspnet} />
-        <Route path="/configuration" component={Configuration} />
-        <Route path="/jwt-auth" component={JwtAuth} />
-        <Route path="/cors" component={Cors} />
-        <Route path="/validation" component={Validation} />
+        <Route path="/dependency-injection" component={DependencyInjection} />
+        <Route path="/configuration-options" component={ConfigurationOptions} />
+        <Route path="/routing" component={Routing} />
+        <Route path="/model-validation" component={ModelValidation} />
+        <Route path="/auth-jwt" component={AuthJwt} />
+        <Route path="/identity-aspnet" component={IdentityAspnet} />
         <Route path="/openapi-swagger" component={OpenapiSwagger} />
-        <Route path="/ef-setup" component={EfSetup} />
-        <Route path="/ef-dbcontext" component={EfDbcontext} />
-        <Route path="/ef-migrations" component={EfMigrations} />
-        <Route path="/ef-querying" component={EfQuerying} />
-        <Route path="/ef-relacionamentos" component={EfRelacionamentos} />
-        <Route path="/ef-performance" component={EfPerformance} />
+        <Route path="/signalr" component={Signalr} />
         <Route path="/solid" component={Solid} />
-        <Route path="/clean-architecture" component={CleanArchitecture} />
-        <Route path="/mediator-cqrs" component={MediatorCqrs} />
         <Route path="/repository-pattern" component={RepositoryPattern} />
-        <Route path="/di-padroes" component={DiPadroes} />
-        <Route path="/hash-cripto" component={HashCripto} />
-        <Route path="/jwt-detalhado" component={JwtDetalhado} />
-        <Route path="/owasp" component={Owasp} />
-        <Route path="/identity" component={Identity} />
+        <Route path="/mediator-cqrs" component={MediatorCqrs} />
+        <Route path="/httpclient-typed" component={HttpclientTyped} />
+        <Route path="/grpc-aspnet" component={GrpcAspnet} />
         <Route path="/serilog" component={Serilog} />
-        <Route path="/automapper" component={Automapper} />
-        <Route path="/polly" component={Polly} />
-        <Route path="/hangfire" component={Hangfire} />
-        <Route path="/blazor" component={Blazor} />
-        <Route path="/mediator-source-gen" component={MediatorSourceGen} />
-        <Route path="/projeto-cli" component={ProjetoCli} />
-        <Route path="/projeto-webapi-crud" component={ProjetoWebapiCrud} />
-        <Route path="/projeto-worker" component={ProjetoWorker} />
-        <Route path="/projeto-grpc" component={ProjetoGrpc} />
-        <Route path="/projeto-blazor-todo" component={ProjetoBlazorTodo} />
-      <Route component={NotFound} />
-    </Switch>
+        <Route path="/benchmarkdotnet" component={Benchmarkdotnet} />
+        <Route path="/native-aot-trimming" component={NativeAotTrimming} />
+        <Route path="/publish-deploy" component={PublishDeploy} />
+        <Route path="/xunit-moq" component={XunitMoq} />
+        <Route path="/projeto-final-webapi" component={ProjetoFinalWebapi} />
+          <Route component={NotFound} />
+        </Switch>
+      </Suspense>
+    </Layout>
   );
 }
 
-export default function App() {
+function App() {
   return (
-    <QueryClientProvider client={queryClient}>
-      <WouterRouter hook={useHashLocation}>
-        <Layout>
-          <AppRoutes />
-        </Layout>
-      </WouterRouter>
-    </QueryClientProvider>
+    <WouterRouter hook={useHashLocation}>
+      <Router />
+    </WouterRouter>
   );
 }
+
+export default App;

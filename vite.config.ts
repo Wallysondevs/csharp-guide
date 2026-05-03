@@ -1,16 +1,17 @@
 import { defineConfig } from "vite";
-  import react from "@vitejs/plugin-react";
-  import tailwindcss from "@tailwindcss/vite";
-  import path from "path";
-  import { fileURLToPath } from "url";
+import react from "@vitejs/plugin-react";
+import tailwindcss from "@tailwindcss/vite";
+import path from "node:path";
+import { fileURLToPath } from "node:url";
 
-  const __dirname = path.dirname(fileURLToPath(import.meta.url));
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
+const port = Number(process.env.PORT) || 5173;
+const basePath = process.env.BASE_PATH || "/csharp-guide/";
 
-  export default defineConfig({
-    base: "/csharp-guide/",
-    plugins: [react(), tailwindcss()],
-    resolve: { alias: { "@": path.resolve(__dirname, "src") } },
-    build: { outDir: "dist", emptyOutDir: true },
-    server: { port: 5173, host: "0.0.0.0" },
-  });
-  
+export default defineConfig({
+  base: basePath,
+  resolve: { alias: { "@": path.resolve(__dirname, "src") } },
+  plugins: [react(), tailwindcss()],
+  server: { host: "0.0.0.0", port, allowedHosts: true },
+  build: { outDir: "dist", emptyOutDir: true, target: "esnext" },
+});
