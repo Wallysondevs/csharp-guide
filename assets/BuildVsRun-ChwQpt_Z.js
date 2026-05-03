@@ -1,0 +1,51 @@
+import{j as e}from"./index-CzLAthD5.js";import{P as s,A as o}from"./AlertBox-CWJo3ar5.js";function d(){return e.jsxs(s,{title:"Build, Restore, Run: o ciclo completo",subtitle:"Entenda o que cada comando do .NET CLI faz por baixo dos panos — e por que existem três etapas distintas.",difficulty:"iniciante",timeToRead:"12 min",children:[e.jsxs("p",{children:["Quando você digita ",e.jsx("code",{children:"dotnet run"}),', o terminal cospe um "Olá, mundo!" alguns segundos depois. Parece mágica, mas internamente acontecem ',e.jsx("strong",{children:"três etapas bem definidas"}),": ",e.jsx("em",{children:"restore"})," (baixar dependências), ",e.jsx("em",{children:"build"})," (compilar o código) e ",e.jsx("em",{children:"run"}),' (executar o binário). Entender cada uma transforma você de "alguém que aperta botão" em "alguém que sabe consertar quando algo dá errado". Pense nesse capítulo como abrir o capô do carro: você não vai virar mecânico, mas vai parar de ter medo.']}),e.jsx("h2",{children:"Restore: baixando os ingredientes"}),e.jsxs("p",{children:["Quase todo projeto .NET depende de ",e.jsx("strong",{children:"pacotes NuGet"})," — bibliotecas reutilizáveis publicadas por terceiros (a Microsoft, comunidades, ou você mesmo). NuGet é o gerenciador de pacotes oficial do .NET, equivalente ao npm do Node.js ou pip do Python. As dependências são listadas no arquivo ",e.jsx("code",{children:".csproj"})," (XML que descreve seu projeto) em tags ",e.jsx("code",{children:"<PackageReference>"}),"."]}),e.jsx("pre",{children:e.jsx("code",{children:`<!-- Trecho de um arquivo MeuApp.csproj -->
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net9.0</TargetFramework>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+  </ItemGroup>
+</Project>`})}),e.jsxs("p",{children:["O comando ",e.jsx("code",{children:"dotnet restore"})," lê esse XML, vai até o servidor do nuget.org, baixa cada pacote (e os pacotes dos quais ele depende, transitivamente) e guarda tudo numa pasta global em ",e.jsx("code",{children:"~/.nuget/packages"}),". Ele também gera um ",e.jsx("code",{children:"obj/project.assets.json"})," que mapeia exatamente quais versões foram resolvidas — assim a build seguinte é determinística."]}),e.jsxs(o,{type:"info",title:"Restore implícito",children:["Desde o .NET 5, comandos como ",e.jsx("code",{children:"dotnet build"})," e ",e.jsx("code",{children:"dotnet run"})," chamam ",e.jsx("code",{children:"restore"})," automaticamente quando notam que faltam pacotes. Você só precisa rodar manualmente se quiser forçar uma re-resolução (ex.: ",e.jsx("code",{children:"dotnet restore --force"}),")."]}),e.jsx("h2",{children:"Build: do código-fonte ao binário"}),e.jsxs("p",{children:[e.jsx("code",{children:"dotnet build"})," é onde o ",e.jsx("strong",{children:"compilador"})," (chamado ",e.jsx("em",{children:"Roslyn"}),") entra em cena. Ele lê todos os arquivos ",e.jsx("code",{children:".cs"})," do projeto, verifica se a sintaxe e os tipos estão corretos e gera dois tipos de saída na pasta ",e.jsx("code",{children:"bin/"}),": um arquivo ",e.jsx("code",{children:".dll"})," (sua biblioteca/aplicação em ",e.jsx("em",{children:"IL"})," — Intermediate Language, uma linguagem intermediária parecida com bytecode) e, se for executável, um pequeno wrapper nativo do seu sistema operacional."]}),e.jsx("pre",{children:e.jsx("code",{children:`# Compila em modo Debug (padrão)
+dotnet build
+
+# Estrutura gerada:
+# MeuApp/
+#   bin/
+#     Debug/
+#       net9.0/
+#         MeuApp.dll          <- seu código compilado em IL
+#         MeuApp.pdb          <- símbolos para debug
+#         MeuApp.deps.json    <- mapa de dependências
+#         MeuApp.runtimeconfig.json
+#   obj/
+#     Debug/net9.0/...        <- arquivos intermediários e cache`})}),e.jsxs("p",{children:["A pasta ",e.jsx("code",{children:"bin/"})," contém o ",e.jsx("strong",{children:"resultado final"})," que você distribuiria. A pasta ",e.jsx("code",{children:"obj/"})," guarda ",e.jsx("strong",{children:"cache de build"}),": hashes dos arquivos, IL parcial, gráficos de dependência. Isso permite a chamada ",e.jsx("em",{children:"incremental build"})," — se você mudar só um ",e.jsx("code",{children:".cs"}),", o compilador detecta via timestamp/hash e recompila apenas o necessário, em vez de tudo do zero."]}),e.jsx("h2",{children:"Debug vs Release"}),e.jsxs("p",{children:["Toda build acontece em uma ",e.jsx("strong",{children:"configuração"}),". As duas padrão são ",e.jsx("code",{children:"Debug"})," (otimizada para depurar: símbolos completos, sem otimizações agressivas, mais rápida de compilar) e ",e.jsx("code",{children:"Release"})," (otimizada para rodar em produção: o JIT pode reordenar código, inlining agressivo, sem checagens extras)."]}),e.jsx("pre",{children:e.jsx("code",{children:`# Build de produção
+dotnet build -c Release
+
+# Run em modo Release
+dotnet run -c Release
+
+# Você verá agora bin/Release/net9.0/...`})}),e.jsxs("p",{children:["Nunca distribua a versão Debug para usuários finais: ela é mais lenta e expõe metadados internos. Sempre publique com ",e.jsx("code",{children:"-c Release"}),"."]}),e.jsxs(o,{type:"warning",title:"Bug que só acontece em Release",children:['Às vezes o compilador em modo Release otimiza tão agressivamente que código incorreto (mas que parecia funcionar em Debug) começa a falhar — geralmente por uso indevido de threads ou variáveis não voláteis. Se algo "só dá errado em produção", teste localmente com ',e.jsx("code",{children:"-c Release"}),"."]}),e.jsx("h2",{children:"RID: o identificador do runtime"}),e.jsxs("p",{children:["Por padrão, ",e.jsx("code",{children:"dotnet build"})," gera um binário ",e.jsx("strong",{children:"portável"}),": precisa do .NET instalado na máquina destino. Se você quer um executável ",e.jsx("em",{children:"self-contained"})," (que carrega o runtime junto), precisa especificar um ",e.jsx("strong",{children:"RID"})," (Runtime IDentifier) — uma string que descreve o sistema operacional + arquitetura do CPU."]}),e.jsx("pre",{children:e.jsx("code",{children:`# Publica para Linux x64, com runtime embutido
+dotnet publish -c Release -r linux-x64 --self-contained true
+
+# Para Windows ARM64
+dotnet publish -c Release -r win-arm64 --self-contained true
+
+# Para macOS Apple Silicon
+dotnet publish -c Release -r osx-arm64 --self-contained true`})}),e.jsxs("p",{children:["RIDs comuns: ",e.jsx("code",{children:"win-x64"}),", ",e.jsx("code",{children:"linux-x64"}),", ",e.jsx("code",{children:"linux-arm64"}),", ",e.jsx("code",{children:"osx-x64"}),", ",e.jsx("code",{children:"osx-arm64"}),". O resultado vai parar em ",e.jsxs("code",{children:["bin/Release/net9.0/","<rid>","/publish/"]})," e contém um único executável que roda mesmo em uma máquina sem .NET instalado."]}),e.jsx("h2",{children:"Run: executar o que foi compilado"}),e.jsxs("p",{children:[e.jsx("code",{children:"dotnet run"})," é um atalho conveniente: ele faz restore (se necessário), build (se necessário) e em seguida executa o binário. É ótimo para desenvolvimento, mas ",e.jsx("strong",{children:"não use em produção"})," — em produção você usa o resultado de ",e.jsx("code",{children:"dotnet publish"})," diretamente."]}),e.jsx("pre",{children:e.jsx("code",{children:`# Atalho de desenvolvimento
+dotnet run
+
+# Equivale (mais ou menos) a:
+dotnet restore
+dotnet build
+dotnet bin/Debug/net9.0/MeuApp.dll
+
+# Passar argumentos para o programa (note o "--"):
+dotnet run -- arg1 arg2 arg3`})}),e.jsx("h2",{children:"Limpando o cache: dotnet clean"}),e.jsxs("p",{children:["Às vezes a build começa a se comportar de forma estranha (erros que somem ao reiniciar, arquivos antigos sendo carregados). Isso geralmente é cache em ",e.jsx("code",{children:"bin/"})," ou ",e.jsx("code",{children:"obj/"})," ficando inconsistente."]}),e.jsx("pre",{children:e.jsx("code",{children:`# Apaga bin/ e obj/ desta configuração
+dotnet clean
+
+# Equivalente "marreta": apagar tudo na unha
+rm -rf bin obj    # Linux/Mac
+# ou no Windows PowerShell:
+# Remove-Item -Recurse -Force bin, obj`})}),e.jsx("h2",{children:"Erros comuns"}),e.jsxs("ul",{children:[e.jsxs("li",{children:[e.jsx("strong",{children:'"Unable to find package X"'}),": pacote escrito errado no ",e.jsx("code",{children:".csproj"}),", ou versão inexistente. Confira em nuget.org."]}),e.jsxs("li",{children:[e.jsx("strong",{children:'"Project file does not exist"'}),": você está rodando ",e.jsx("code",{children:"dotnet build"})," fora da pasta com o ",e.jsx("code",{children:".csproj"}),". Passe o caminho ou entre na pasta."]}),e.jsxs("li",{children:[e.jsx("strong",{children:"Build fica eterna em CI"}),": cache de NuGet não está sendo reaproveitado entre execuções. Configure cache de ",e.jsx("code",{children:"~/.nuget/packages"})," no seu pipeline."]}),e.jsxs("li",{children:[e.jsx("strong",{children:"Mudou código mas executa o antigo"}),": provavelmente está rodando o ",e.jsx("code",{children:".dll"})," direto, sem rebuild. Use ",e.jsx("code",{children:"dotnet run"})," ou rode ",e.jsx("code",{children:"dotnet build"})," antes."]})]}),e.jsx("h2",{children:"Resumo"}),e.jsxs("ul",{children:[e.jsxs("li",{children:[e.jsx("code",{children:"dotnet restore"})," baixa pacotes NuGet listados no ",e.jsx("code",{children:".csproj"}),"."]}),e.jsxs("li",{children:[e.jsx("code",{children:"dotnet build"})," compila ",e.jsx("code",{children:".cs"})," → ",e.jsx("code",{children:".dll"})," em IL, gerando ",e.jsx("code",{children:"bin/"})," e ",e.jsx("code",{children:"obj/"}),"."]}),e.jsxs("li",{children:[e.jsx("code",{children:"obj/"})," é cache; ",e.jsx("code",{children:"bin/"})," é resultado distribuível."]}),e.jsx("li",{children:"Debug é para desenvolver; Release é para produção (mais otimizado)."}),e.jsxs("li",{children:["RID descreve o destino: ",e.jsx("code",{children:"linux-x64"}),", ",e.jsx("code",{children:"win-arm64"}),", etc., usado em ",e.jsx("code",{children:"dotnet publish"}),"."]}),e.jsxs("li",{children:[e.jsx("code",{children:"dotnet run"})," é atalho dev (restore + build + executar)."]}),e.jsxs("li",{children:[e.jsx("code",{children:"dotnet clean"})," apaga caches quando algo emperra."]})]})]})}export{d as default};
